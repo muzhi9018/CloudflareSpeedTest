@@ -143,9 +143,9 @@ func main() {
 	speedData := task.TestDownloadSpeed(pingData)
 	utils.ExportCsv(speedData) // 输出文件
 	speedData.Print()          // 打印结果
-	endPrint()                 // 根据情况选择退出方式（针对 Windows）
 	// 更新 DNS 记录
 	ddns.UpdateDNSRecord(speedData)
+	endPrint() // 根据情况选择退出方式（针对 Windows）
 }
 
 // 根据情况选择退出方式（针对 Windows）
