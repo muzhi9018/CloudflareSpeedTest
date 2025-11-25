@@ -1,0 +1,9 @@
+speed:
+  test-url: https://youtest.com
+  download-speed: 15
+
+cloudflare:
+  api-token: ''
+  zone-id: you-zone-id
+  domain: you-domain
+  comment: you-comment

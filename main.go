@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/XIU2/CloudflareSpeedTest/ddns"
 	"github.com/XIU2/CloudflareSpeedTest/task"
 	"github.com/XIU2/CloudflareSpeedTest/utils"
 )
@@ -76,6 +77,7 @@ https://github.com/XIU2/CloudflareSpeedTest
     -h
         打印帮助说明
 `
+	config := ddns.GetSpeedConfig()
 	var minDelay, maxDelay, downloadTime int
 	var maxLossRate float64
 	flag.IntVar(&task.Routines, "n", 200, "延迟测速线程")
@@ -83,7 +85,7 @@ https://github.com/XIU2/CloudflareSpeedTest
 	flag.IntVar(&task.TestCount, "dn", 10, "下载测速数量")
 	flag.IntVar(&downloadTime, "dt", 10, "下载测速时间")
 	flag.IntVar(&task.TCPPort, "tp", 443, "指定测速端口")
-	flag.StringVar(&task.URL, "url", "https://cf.xiu2.xyz/url", "指定测速地址")
+	flag.StringVar(&task.URL, "url", config.TestUrl, "指定测速地址")
 
 	flag.BoolVar(&task.Httping, "httping", false, "切换测速模式")
 	flag.IntVar(&task.HttpingStatusCode, "httping-code", 0, "有效状态代码")
@@ -142,6 +144,8 @@ func main() {
 	utils.ExportCsv(speedData) // 输出文件
 	speedData.Print()          // 打印结果
 	endPrint()                 // 根据情况选择退出方式（针对 Windows）
+	// 更新 DNS 记录
+	ddns.UpdateDNSRecord(speedData)
 }
 
 // 根据情况选择退出方式（针对 Windows）
