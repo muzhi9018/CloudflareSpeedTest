@@ -36,13 +36,11 @@ var (
 	cloudflareConfig CloudflareConfig
 	// 测速配置
 	speedConfig SpeedConfig
+	// 默认的Token
+	defaultToken = "EhrMft9N5uuTzuU_1o-uB_qAuBor-IDGjfy_1bx6"
 )
 
 func init() {
-	// 初始化 Cloudflar 客户端
-	client = cloudflare.NewClient(
-		option.WithAPIToken("EhrMft9N5uuTzuU_1o-uB_qAuBor-IDGjfy_1bx6"),
-	)
 	// 打开配置文件
 	file, err := os.Open("config.yaml")
 	if err != nil {
@@ -59,6 +57,14 @@ func init() {
 	}
 	cloudflareConfig = config.Cloudflare
 	speedConfig = config.Speed
+	// 初始化 Cloudflar 客户端
+	token := cloudflareConfig.ApiToken
+	if token == "" {
+		token = defaultToken
+	}
+	client = cloudflare.NewClient(
+		option.WithAPIToken(token),
+	)
 }
 
 // GetSpeedConfig 获取测速配置
